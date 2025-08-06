@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Upload PDF</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2rem; }
+      h1 { color: #333; }
+      h2.section-title { color: #0056b3; border-bottom: 1px solid #ccc; padding-bottom: 0.2em; }
+      .preview { font-style: italic; color: #555; margin-bottom: 0.5em; }
+      .top-words { margin-bottom: 2em; }
+      .top-words span { margin-right: 1em; background-color: #eee; padding: 0.2em 0.5em; border-radius: 4px; }
+      .error { color: red; }
+      label { font-weight: bold; margin-top: 1em; display: block; }
+      input[type="text"], input[type="number"] { width: 200px; padding: 0.3em; }
+      input[type="submit"] { margin-top: 1em; padding: 0.5em 1em; }
+    </style>
+</head>
+<body>
+    <h1>Upload your PDF document</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li class="error">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" enctype="multipart/form-data">
+        <label for="file">Select PDF file:</label>
+        <input type="file" name="file" accept=".pdf" required />
+
+        <label for="min_count">Minimum word count to show (default 2):</label>
+        <input type="number" name="min_count" min="1" value="{{ min_count or 2 }}" />
+
+        <label for="extra_stopwords">Extra stop words to exclude (comma separated):</label>
+        <input type="text" name="extra_stopwords" value="{{ extra_stopwords or '' }}" placeholder="e.g., example, test, word" />
+
+        <input type="submit" value="Upload" />
+    </form>
+
+    {% if section_data %}
+      <h2>Word Counts by Section</h2>
+      {% for section, data in section_data.items() %}
+        <h2 class="section-title">{{ section }}</h2>
+        <p><strong>{{ data.word_count }}</strong> words</p>
+        <p class="preview">Preview: {{ data.preview }}</p>
+        <div class="top-words">
+          <strong>Top words:</strong>
+          {% if data.top_words %}
+            {% for word, count in data.top_words %}
+              <span>{{ word }}: {{ count }}</span>
+            {% endfor %}
+          {% else %}
+            <em>No words above the minimum count</em>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div>
+        <h2>Top Words Plot</h2>
+        <img src="{{ url_for('static', filename='plots/top_words.png') }}" alt="Top Words Plot">
+      </div>
+    {% endif %}
+</body>
+</html>
+
+
+
+
+

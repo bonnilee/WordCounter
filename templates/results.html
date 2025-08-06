@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Word Counts by Section</title>
+</head>
+<body>
+    <h1>Word Counts by Section</h1>
+
+    {% if section_word_counts %}
+        <ul>
+        {% for section, count in section_word_counts.items() %}
+            <li><strong>{{ section }}</strong>: {{ count }} words</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No sections found in the document.</p>
+    {% endif %}
+
+    <a href="/">← Upload another PDF</a>
+</body>
+</html>
+
