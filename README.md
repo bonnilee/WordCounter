@@ -24,5 +24,5 @@ This web application allows users to upload a PDF document and search for specif
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/pdf-word-search-app.git
+   git clone https://github.com/bonnilee/WordCounter.git
    cd pdf-word-search-app
